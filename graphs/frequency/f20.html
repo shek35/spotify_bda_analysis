@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": "Tommy Dorsey Orchestra", "label": "Tommy Dorsey Orchestra", "shape": "dot"}, {"id": "Radclyffe Hall", "label": "Radclyffe Hall", "shape": "dot"}, {"id": "Earl Hines", "label": "Earl Hines", "shape": "dot"}, {"id": "Giovanni Pasini", "label": "Giovanni Pasini", "shape": "dot"}, {"id": "Jones-Smith", "label": "Jones-Smith", "shape": "dot"}, {"id": "Tommy Dorsey", "label": "Tommy Dorsey", "shape": "dot"}, {"id": "Ren\u00e9 De Buxeuil", "label": "Ren\u00e9 De Buxeuil", "shape": "dot"}, {"id": "Duke Ellington", "label": "Duke Ellington", "shape": "dot"}, {"id": "\"James Dapognys Chicago Jazz Band\"", "label": "\"James Dapognys Chicago Jazz Band\"", "shape": "dot"}, {"id": "Jack Leonard", "label": "Jack Leonard", "shape": "dot"}, {"id": "Qatar Concert Choir", "label": "Qatar Concert Choir", "shape": "dot"}, {"id": "Dick Haymes", "label": "Dick Haymes", "shape": "dot"}, {"id": "The Chenille Sisters", "label": "The Chenille Sisters", "shape": "dot"}, {"id": "The Pied Pipers", "label": "The Pied Pipers", "shape": "dot"}, {"id": "Gordon Jenkins", "label": "Gordon Jenkins", "shape": "dot"}, {"id": "Frank Sinatra", "label": "Frank Sinatra", "shape": "dot"}, {"id": "Victor Young", "label": "Victor Young", "shape": "dot"}, {"id": "Elvis Presley", "label": "Elvis Presley", "shape": "dot"}, {"id": "Karl B\u00f6hm", "label": "Karl B\u00f6hm", "shape": "dot"}, {"id": "Incorporated", "label": "Incorporated", "shape": "dot"}, {"id": "Harry James", "label": "Harry James", "shape": "dot"}, {"id": "Sy Oliver", "label": "Sy Oliver", "shape": "dot"}, {"id": "Hociel Thomas", "label": "Hociel Thomas", "shape": "dot"}, {"id": "Eug\u00e9nie Buffet", "label": "Eug\u00e9nie Buffet", "shape": "dot"}, {"id": "Louis Armstrong", "label": "Louis Armstrong", "shape": "dot"}, {"id": "Edythe Wright", "label": "Edythe Wright", "shape": "dot"}, {"id": "Bertha \"Chippie\" Hill", "label": "Bertha \"Chippie\" Hill", "shape": "dot"}, {"id": "Alice White", "label": "Alice White", "shape": "dot"}, {"id": "Bessie Smith", "label": "Bessie Smith", "shape": "dot"}, {"id": "Richard Strauss", "label": "Richard Strauss", "shape": "dot"}]);
+        edges = new vis.DataSet([{"from": "Dick Haymes", "title": 2, "to": "Gordon Jenkins", "value": 2}, {"from": "Dick Haymes", "title": 4, "to": "Harry James", "value": 4}, {"from": "Dick Haymes", "title": 1, "to": "Victor Young", "value": 1}, {"from": "Dick Haymes", "title": 1, "to": "The Pied Pipers", "value": 1}, {"from": "Louis Armstrong", "title": 4, "to": "Earl Hines", "value": 4}, {"from": "Bessie Smith", "title": 4, "to": "Louis Armstrong", "value": 4}, {"from": "Hociel Thomas", "title": 1, "to": "Louis Armstrong", "value": 1}, {"from": "Bertha \"Chippie\" Hill", "title": 1, "to": "Louis Armstrong", "value": 1}, {"from": "Qatar Concert Choir", "title": 1, "to": "Giovanni Pasini", "value": 1}, {"from": "Eug\u00e9nie Buffet", "title": 1, "to": "Ren\u00e9 De Buxeuil", "value": 1}, {"from": "Radclyffe Hall", "title": 214, "to": "Alice White", "value": 214}, {"from": "The Chenille Sisters", "title": 13, "to": "\"James Dapognys Chicago Jazz Band\"", "value": 13}, {"from": "Jones-Smith", "title": 6, "to": "Incorporated", "value": 6}, {"from": "Richard Strauss", "title": 10, "to": "Karl B\u00f6hm", "value": 10}, {"from": "Tommy Dorsey", "title": 2, "to": "Jack Leonard", "value": 2}, {"from": "Tommy Dorsey", "title": 1, "to": "Sy Oliver", "value": 1}, {"from": "Frank Sinatra", "title": 1, "to": "Tommy Dorsey Orchestra", "value": 1}, {"from": "Tommy Dorsey", "title": 1, "to": "Elvis Presley", "value": 1}, {"from": "Tommy Dorsey", "title": 3, "to": "Edythe Wright", "value": 3}, {"from": "Tommy Dorsey", "title": 1, "to": "Duke Ellington", "value": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

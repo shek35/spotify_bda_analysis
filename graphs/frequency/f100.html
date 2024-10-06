@@ -1,0 +1,204 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+        #loadingBar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width: 100%;
+            height: 800px;
+            background-color:rgba(200,200,200,0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:20px;
+            height:20px;
+            margin:auto auto auto auto;
+            border-radius:11px;
+            border:2px solid rgba(30,30,30,0.05);
+            background: rgb(0, 173, 246); /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+        }
+
+        #border {
+            position:absolute;
+            top:10px;
+            left:10px;
+            width:500px;
+            height:23px;
+            margin:auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+            border-radius:10px;
+        }
+
+        #text {
+            position:absolute;
+            top:8px;
+            left:530px;
+            width:30px;
+            height:50px;
+            margin:auto auto auto auto;
+            font-size:22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position:relative;
+            top:400px;
+            width:600px;
+            height:44px;
+            margin:auto auto auto auto;
+            border:8px solid rgba(0,0,0,0.1);
+            background: rgb(252,252,252); /* Old browsers */
+            background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+            border-radius:72px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+<div id="loadingBar">
+    <div class="outerBorder">
+        <div id="text">0%</div>
+        <div id="border">
+            <div id="bar"></div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": "Lilianne Harvey", "label": "Lilianne Harvey", "shape": "dot"}, {"id": "Butterbeans \u0026 Susie", "label": "Butterbeans \u0026 Susie", "shape": "dot"}, {"id": "Jones-Smith", "label": "Jones-Smith", "shape": "dot"}, {"id": "Benny Meroff \u0026 His Orchestra", "label": "Benny Meroff \u0026 His Orchestra", "shape": "dot"}, {"id": "The SPIRIT", "label": "The SPIRIT", "shape": "dot"}, {"id": "Carl Loewe", "label": "Carl Loewe", "shape": "dot"}, {"id": "Helen Forrest", "label": "Helen Forrest", "shape": "dot"}, {"id": "\"James Dapognys Chicago Jazz Band\"", "label": "\"James Dapognys Chicago Jazz Band\"", "shape": "dot"}, {"id": "Paul Hoppe", "label": "Paul Hoppe", "shape": "dot"}, {"id": "The Wolverines", "label": "The Wolverines", "shape": "dot"}, {"id": "Mitglieder der Staatskapelle Berlin", "label": "Mitglieder der Staatskapelle Berlin", "shape": "dot"}, {"id": "Ruby Smith", "label": "Ruby Smith", "shape": "dot"}, {"id": "Emile Rousseau", "label": "Emile Rousseau", "shape": "dot"}, {"id": "Roberto Fugazot", "label": "Roberto Fugazot", "shape": "dot"}, {"id": "Louis Armstrong \u0026 His Hot Seven", "label": "Louis Armstrong \u0026 His Hot Seven", "shape": "dot"}, {"id": "Barbara Cook", "label": "Barbara Cook", "shape": "dot"}, {"id": "Jelly Roll Morton", "label": "Jelly Roll Morton", "shape": "dot"}, {"id": "Bix Beiderbecke", "label": "Bix Beiderbecke", "shape": "dot"}, {"id": "Charlie Christian", "label": "Charlie Christian", "shape": "dot"}, {"id": "Irina Salkow", "label": "Irina Salkow", "shape": "dot"}, {"id": "John Raitt", "label": "John Raitt", "shape": "dot"}, {"id": "Lucy Perelli", "label": "Lucy Perelli", "shape": "dot"}, {"id": "Ludwig van Beethoven", "label": "Ludwig van Beethoven", "shape": "dot"}, {"id": "Mitglieder der Kapelle der Staatsoper Berlin", "label": "Mitglieder der Kapelle der Staatsoper Berlin", "shape": "dot"}, {"id": "Azucena Maizani", "label": "Azucena Maizani", "shape": "dot"}, {"id": "Ella Logan", "label": "Ella Logan", "shape": "dot"}, {"id": "\"Jackie Moms Mabley\"", "label": "\"Jackie Moms Mabley\"", "shape": "dot"}, {"id": "Jimmy Dorsey", "label": "Jimmy Dorsey", "shape": "dot"}, {"id": "Karl B\u00f6hm", "label": "Karl B\u00f6hm", "shape": "dot"}, {"id": "Incorporated", "label": "Incorporated", "shape": "dot"}, {"id": "His Rhythm and Orchestra", "label": "His Rhythm and Orchestra", "shape": "dot"}, {"id": "Piero Coppola", "label": "Piero Coppola", "shape": "dot"}, {"id": "Teddy Wilson", "label": "Teddy Wilson", "shape": "dot"}, {"id": "Vladimir Horowitz", "label": "Vladimir Horowitz", "shape": "dot"}, {"id": "Bertha \"Chippie\" Hill", "label": "Bertha \"Chippie\" Hill", "shape": "dot"}, {"id": "Alice White", "label": "Alice White", "shape": "dot"}, {"id": "Bessie Smith", "label": "Bessie Smith", "shape": "dot"}, {"id": "Heinrich Schlusnus", "label": "Heinrich Schlusnus", "shape": "dot"}, {"id": "Rudolf Watzke", "label": "Rudolf Watzke", "shape": "dot"}, {"id": "Arthur Rubinstein", "label": "Arthur Rubinstein", "shape": "dot"}, {"id": "Radclyffe Hall", "label": "Radclyffe Hall", "shape": "dot"}, {"id": "Bill \"Bojangles\" Robinson", "label": "Bill \"Bojangles\" Robinson", "shape": "dot"}, {"id": "Giovanni Pasini", "label": "Giovanni Pasini", "shape": "dot"}, {"id": "Frankie Trumbauer \u0026 His Orchestra", "label": "Frankie Trumbauer \u0026 His Orchestra", "shape": "dot"}, {"id": "Tommy Dorsey", "label": "Tommy Dorsey", "shape": "dot"}, {"id": "Bunny Berigan", "label": "Bunny Berigan", "shape": "dot"}, {"id": "Louis Armstrong \u0026 His Hot Five", "label": "Louis Armstrong \u0026 His Hot Five", "shape": "dot"}, {"id": "Georgette Heyer", "label": "Georgette Heyer", "shape": "dot"}, {"id": "Why Not", "label": "Why Not", "shape": "dot"}, {"id": "The Blue Rhythm Band", "label": "The Blue Rhythm Band", "shape": "dot"}, {"id": "Peggy Lee", "label": "Peggy Lee", "shape": "dot"}, {"id": "Saadettin Kaynak", "label": "Saadettin Kaynak", "shape": "dot"}, {"id": "Young Lil Sunscreen", "label": "Young Lil Sunscreen", "shape": "dot"}, {"id": "Benny Goodman Sextet", "label": "Benny Goodman Sextet", "shape": "dot"}, {"id": "Jimmy McPartland", "label": "Jimmy McPartland", "shape": "dot"}, {"id": "Giuseppe Verdi", "label": "Giuseppe Verdi", "shape": "dot"}, {"id": "The Chenille Sisters", "label": "The Chenille Sisters", "shape": "dot"}, {"id": "Louis Musy", "label": "Louis Musy", "shape": "dot"}, {"id": "Gordon Jenkins", "label": "Gordon Jenkins", "shape": "dot"}, {"id": "Baron Lee", "label": "Baron Lee", "shape": "dot"}, {"id": "\"Bob Sawyers Jazz Band\"", "label": "\"Bob Sawyers Jazz Band\"", "shape": "dot"}, {"id": "Frank Trumbauer \u0026 His Orchestra", "label": "Frank Trumbauer \u0026 His Orchestra", "shape": "dot"}, {"id": "Elvis Presley", "label": "Elvis Presley", "shape": "dot"}, {"id": "Harry James", "label": "Harry James", "shape": "dot"}, {"id": "Hociel Thomas", "label": "Hociel Thomas", "shape": "dot"}, {"id": "Eug\u00e9nie Buffet", "label": "Eug\u00e9nie Buffet", "shape": "dot"}, {"id": "Jazz Band", "label": "Jazz Band", "shape": "dot"}, {"id": "Agust\u00edn Irusta", "label": "Agust\u00edn Irusta", "shape": "dot"}, {"id": "Louis Armstrong Jazz Four", "label": "Louis Armstrong Jazz Four", "shape": "dot"}, {"id": "Gaston Gabaroche", "label": "Gaston Gabaroche", "shape": "dot"}, {"id": "Fr\u00e9d\u00e9ric Chopin", "label": "Fr\u00e9d\u00e9ric Chopin", "shape": "dot"}, {"id": "Thomanerchor Leipzig", "label": "Thomanerchor Leipzig", "shape": "dot"}, {"id": "Tommy Dorsey Orchestra", "label": "Tommy Dorsey Orchestra", "shape": "dot"}, {"id": "Edouard Bervily", "label": "Edouard Bervily", "shape": "dot"}, {"id": "Frankie Trumbauer", "label": "Frankie Trumbauer", "shape": "dot"}, {"id": "Robert Lockwood", "label": "Robert Lockwood", "shape": "dot"}, {"id": "Richard Wagner", "label": "Richard Wagner", "shape": "dot"}, {"id": "Earl Hines", "label": "Earl Hines", "shape": "dot"}, {"id": "Geoff Horgan", "label": "Geoff Horgan", "shape": "dot"}, {"id": "Ren\u00e9 De Buxeuil", "label": "Ren\u00e9 De Buxeuil", "shape": "dot"}, {"id": "Duke Ellington", "label": "Duke Ellington", "shape": "dot"}, {"id": "Francesco Bartolomeo Conti", "label": "Francesco Bartolomeo Conti", "shape": "dot"}, {"id": "Johnny Dodds", "label": "Johnny Dodds", "shape": "dot"}, {"id": "Otto Reutter", "label": "Otto Reutter", "shape": "dot"}, {"id": "Yvonne Brothier", "label": "Yvonne Brothier", "shape": "dot"}, {"id": "Carroll Dickerson Orchestra", "label": "Carroll Dickerson Orchestra", "shape": "dot"}, {"id": "Henriette Lebard", "label": "Henriette Lebard", "shape": "dot"}, {"id": "Benny Goodman", "label": "Benny Goodman", "shape": "dot"}, {"id": "Jack Leonard", "label": "Jack Leonard", "shape": "dot"}, {"id": "Staatskapelle Berlin", "label": "Staatskapelle Berlin", "shape": "dot"}, {"id": "Don Redman", "label": "Don Redman", "shape": "dot"}, {"id": "Haf\u0131z Fahri", "label": "Haf\u0131z Fahri", "shape": "dot"}, {"id": "Dick Haymes", "label": "Dick Haymes", "shape": "dot"}, {"id": "Helen Ward", "label": "Helen Ward", "shape": "dot"}, {"id": "Ch\u0026#339;ur Piero Coppola", "label": "Ch\u0026#339;ur Piero Coppola", "shape": "dot"}, {"id": "Koloman von Pataky", "label": "Koloman von Pataky", "shape": "dot"}, {"id": "Jimmy Johnson", "label": "Jimmy Johnson", "shape": "dot"}, {"id": "Victor Young", "label": "Victor Young", "shape": "dot"}, {"id": "Jos\u00e9 De Tr\u00e9vi", "label": "Jos\u00e9 De Tr\u00e9vi", "shape": "dot"}, {"id": "Billie Holiday", "label": "Billie Holiday", "shape": "dot"}, {"id": "Marinette Fenoyer", "label": "Marinette Fenoyer", "shape": "dot"}, {"id": "Broadway Bell Hops", "label": "Broadway Bell Hops", "shape": "dot"}, {"id": "Umberto Urbano", "label": "Umberto Urbano", "shape": "dot"}, {"id": "Johann Sebastian Bach", "label": "Johann Sebastian Bach", "shape": "dot"}, {"id": "Luis Scalon", "label": "Luis Scalon", "shape": "dot"}, {"id": "\"Lani McIntires Hawaiians\"", "label": "\"Lani McIntires Hawaiians\"", "shape": "dot"}, {"id": "Jean Gabin", "label": "Jean Gabin", "shape": "dot"}, {"id": "Orchestre Georges Lauweryns", "label": "Orchestre Georges Lauweryns", "shape": "dot"}, {"id": "Edythe Wright", "label": "Edythe Wright", "shape": "dot"}, {"id": "Paul Payen", "label": "Paul Payen", "shape": "dot"}, {"id": "Gil Rodin", "label": "Gil Rodin", "shape": "dot"}, {"id": "Mistinguett", "label": "Mistinguett", "shape": "dot"}, {"id": "Richard Strauss", "label": "Richard Strauss", "shape": "dot"}, {"id": "Dranem", "label": "Dranem", "shape": "dot"}, {"id": "Francisco Canaro", "label": "Francisco Canaro", "shape": "dot"}, {"id": "P. G. Wodehouse", "label": "P. G. Wodehouse", "shape": "dot"}, {"id": "Tinboat", "label": "Tinboat", "shape": "dot"}, {"id": "Pietro Mascagni", "label": "Pietro Mascagni", "shape": "dot"}, {"id": "Hans Pfitzner", "label": "Hans Pfitzner", "shape": "dot"}, {"id": "Paul Bridgwater", "label": "Paul Bridgwater", "shape": "dot"}, {"id": "Orchestre Piero Coppola", "label": "Orchestre Piero Coppola", "shape": "dot"}, {"id": "Orchestra", "label": "Orchestra", "shape": "dot"}, {"id": "Jimmie Rodgers", "label": "Jimmie Rodgers", "shape": "dot"}, {"id": "Jr.", "label": "Jr.", "shape": "dot"}, {"id": "Jelly Roll Morton \u0026 His Red Hot Peppers", "label": "Jelly Roll Morton \u0026 His Red Hot Peppers", "shape": "dot"}, {"id": "Tommy Dorsey \u0026 His Clambake Seven", "label": "Tommy Dorsey \u0026 His Clambake Seven", "shape": "dot"}, {"id": "Paul Mania", "label": "Paul Mania", "shape": "dot"}, {"id": "Qatar Concert Choir", "label": "Qatar Concert Choir", "shape": "dot"}, {"id": "Georges Lauweryns", "label": "Georges Lauweryns", "shape": "dot"}, {"id": "George Gershwin", "label": "George Gershwin", "shape": "dot"}, {"id": "The Pied Pipers", "label": "The Pied Pipers", "shape": "dot"}, {"id": "Irene Gallardo", "label": "Irene Gallardo", "shape": "dot"}, {"id": "Frank Sinatra", "label": "Frank Sinatra", "shape": "dot"}, {"id": "Fats Waller", "label": "Fats Waller", "shape": "dot"}, {"id": "Charlo", "label": "Charlo", "shape": "dot"}, {"id": "Sy Oliver", "label": "Sy Oliver", "shape": "dot"}, {"id": "Pearl Bailey", "label": "Pearl Bailey", "shape": "dot"}, {"id": "Berliner Philharmoniker", "label": "Berliner Philharmoniker", "shape": "dot"}, {"id": "Henri Garat", "label": "Henri Garat", "shape": "dot"}, {"id": "Louis Armstrong", "label": "Louis Armstrong", "shape": "dot"}, {"id": "Agrupaci\u00f3n Musical Nuestro Padre Jes\u00fas de la Salud -Los Gitanos-", "label": "Agrupaci\u00f3n Musical Nuestro Padre Jes\u00fas de la Salud -Los Gitanos-", "shape": "dot"}, {"id": "Wolfgang Amadeus Mozart", "label": "Wolfgang Amadeus Mozart", "shape": "dot"}]);
+        edges = new vis.DataSet([{"from": "Dick Haymes", "title": 2, "to": "Gordon Jenkins", "value": 2}, {"from": "Dick Haymes", "title": 4, "to": "Harry James", "value": 4}, {"from": "Dick Haymes", "title": 1, "to": "Victor Young", "value": 1}, {"from": "Dick Haymes", "title": 1, "to": "The Pied Pipers", "value": 1}, {"from": "Louis Armstrong", "title": 4, "to": "Earl Hines", "value": 4}, {"from": "Bessie Smith", "title": 4, "to": "Louis Armstrong", "value": 4}, {"from": "Hociel Thomas", "title": 1, "to": "Louis Armstrong", "value": 1}, {"from": "Bertha \"Chippie\" Hill", "title": 1, "to": "Louis Armstrong", "value": 1}, {"from": "Qatar Concert Choir", "title": 1, "to": "Giovanni Pasini", "value": 1}, {"from": "Eug\u00e9nie Buffet", "title": 1, "to": "Ren\u00e9 De Buxeuil", "value": 1}, {"from": "Radclyffe Hall", "title": 214, "to": "Alice White", "value": 214}, {"from": "The Chenille Sisters", "title": 13, "to": "\"James Dapognys Chicago Jazz Band\"", "value": 13}, {"from": "Jones-Smith", "title": 6, "to": "Incorporated", "value": 6}, {"from": "Richard Strauss", "title": 10, "to": "Karl B\u00f6hm", "value": 10}, {"from": "Tommy Dorsey", "title": 2, "to": "Jack Leonard", "value": 2}, {"from": "Tommy Dorsey", "title": 1, "to": "Sy Oliver", "value": 1}, {"from": "Frank Sinatra", "title": 1, "to": "Tommy Dorsey Orchestra", "value": 1}, {"from": "Tommy Dorsey", "title": 1, "to": "Elvis Presley", "value": 1}, {"from": "Tommy Dorsey", "title": 3, "to": "Edythe Wright", "value": 3}, {"from": "Tommy Dorsey", "title": 1, "to": "Duke Ellington", "value": 1}, {"from": "Tommy Dorsey \u0026 His Clambake Seven", "title": 2, "to": "Edythe Wright", "value": 2}, {"from": "Louis Armstrong \u0026 His Hot Seven", "title": 20, "to": "Carroll Dickerson Orchestra", "value": 20}, {"from": "Tommy Dorsey", "title": 5, "to": "Jimmy Dorsey", "value": 5}, {"from": "Louis Armstrong \u0026 His Hot Five", "title": 2, "to": "Butterbeans \u0026 Susie", "value": 2}, {"from": "Francisco Canaro", "title": 12, "to": "Azucena Maizani", "value": 12}, {"from": "Mistinguett", "title": 1, "to": "Jean Gabin", "value": 1}, {"from": "Tommy Dorsey \u0026 His Clambake Seven", "title": 1, "to": "Tommy Dorsey", "value": 1}, {"from": "Louis Armstrong Jazz Four", "title": 2, "to": "Hociel Thomas", "value": 2}, {"from": "Paul Hoppe", "title": 1, "to": "Heinrich Schlusnus", "value": 1}, {"from": "Giuseppe Verdi", "title": 2, "to": "Umberto Urbano", "value": 2}, {"from": "Lilianne Harvey", "title": 1, "to": "Henri Garat", "value": 1}, {"from": "Jelly Roll Morton", "title": 4, "to": "Johnny Dodds", "value": 4}, {"from": "Jelly Roll Morton \u0026 His Red Hot Peppers", "title": 4, "to": "Jelly Roll Morton", "value": 4}, {"from": "Fats Waller", "title": 2, "to": "His Rhythm and Orchestra", "value": 2}, {"from": "Bunny Berigan", "title": 4, "to": "Tommy Dorsey", "value": 4}, {"from": "Georgette Heyer", "title": 443, "to": "Irina Salkow", "value": 443}, {"from": "George Gershwin", "title": 14, "to": "P. G. Wodehouse", "value": 14}, {"from": "Dranem", "title": 1, "to": "Gaston Gabaroche", "value": 1}, {"from": "Richard Wagner", "title": 4, "to": "Staatskapelle Berlin", "value": 4}, {"from": "Frankie Trumbauer \u0026 His Orchestra", "title": 8, "to": "Bix Beiderbecke", "value": 8}, {"from": "Broadway Bell Hops", "title": 2, "to": "Bix Beiderbecke", "value": 2}, {"from": "Jimmie Rodgers", "title": 4, "to": "\"Bob Sawyers Jazz Band\"", "value": 4}, {"from": "Frank Trumbauer \u0026 His Orchestra", "title": 1, "to": "Bix Beiderbecke", "value": 1}, {"from": "Frankie Trumbauer", "title": 1, "to": "Bix Beiderbecke", "value": 1}, {"from": "Agrupaci\u00f3n Musical Nuestro Padre Jes\u00fas de la Salud -Los Gitanos-", "title": 2, "to": "Irene Gallardo", "value": 2}, {"from": "Benny Meroff \u0026 His Orchestra", "title": 2, "to": "Bix Beiderbecke", "value": 2}, {"from": "Bix Beiderbecke", "title": 10, "to": "The Wolverines", "value": 10}, {"from": "Francisco Canaro", "title": 70, "to": "Agust\u00edn Irusta", "value": 70}, {"from": "Orchestre Piero Coppola", "title": 3, "to": "Jos\u00e9 De Tr\u00e9vi", "value": 3}, {"from": "Paul Mania", "title": 1, "to": "Heinrich Schlusnus", "value": 1}, {"from": "Orchestre Piero Coppola", "title": 9, "to": "Piero Coppola", "value": 9}, {"from": "Richard Wagner", "title": 1, "to": "Mitglieder der Staatskapelle Berlin", "value": 1}, {"from": "Orchestre Piero Coppola", "title": 7, "to": "Ch\u0026#339;ur Piero Coppola", "value": 7}, {"from": "Ludwig van Beethoven", "title": 14, "to": "Staatskapelle Berlin", "value": 14}, {"from": "Pietro Mascagni", "title": 3, "to": "Staatskapelle Berlin", "value": 3}, {"from": "Baron Lee", "title": 2, "to": "The Blue Rhythm Band", "value": 2}, {"from": "Giuseppe Verdi", "title": 1, "to": "Staatskapelle Berlin", "value": 1}, {"from": "Why Not", "title": 1, "to": "Paul Bridgwater", "value": 1}, {"from": "Paul Bridgwater", "title": 1, "to": "Geoff Horgan", "value": 1}, {"from": "Francisco Canaro", "title": 4, "to": "Luis Scalon", "value": 4}, {"from": "Billie Holiday", "title": 203, "to": "Teddy Wilson", "value": 203}, {"from": "Johann Sebastian Bach", "title": 4, "to": "Thomanerchor Leipzig", "value": 4}, {"from": "Georges Lauweryns", "title": 1, "to": "Yvonne Brothier", "value": 1}, {"from": "Ella Logan", "title": 1, "to": "The SPIRIT", "value": 1}, {"from": "Orchestre Piero Coppola", "title": 1, "to": "Marinette Fenoyer", "value": 1}, {"from": "Hans Pfitzner", "title": 1, "to": "Staatskapelle Berlin", "value": 1}, {"from": "Ruby Smith", "title": 1, "to": "Jimmy Johnson", "value": 1}, {"from": "Hans Pfitzner", "title": 1, "to": "Mitglieder der Kapelle der Staatsoper Berlin", "value": 1}, {"from": "Orchestre Piero Coppola", "title": 4, "to": "Lucy Perelli", "value": 4}, {"from": "Orchestre Piero Coppola", "title": 1, "to": "Yvonne Brothier", "value": 1}, {"from": "Jimmie Rodgers", "title": 1, "to": "\"Lani McIntires Hawaiians\"", "value": 1}, {"from": "Robert Lockwood", "title": 1, "to": "Jr.", "value": 1}, {"from": "Francisco Canaro", "title": 377, "to": "Charlo", "value": 377}, {"from": "Wolfgang Amadeus Mozart", "title": 4, "to": "Koloman von Pataky", "value": 4}, {"from": "Bill \"Bojangles\" Robinson", "title": 1, "to": "Don Redman", "value": 1}, {"from": "Yvonne Brothier", "title": 1, "to": "Orchestre Georges Lauweryns", "value": 1}, {"from": "Orchestre Piero Coppola", "title": 1, "to": "Louis Musy", "value": 1}, {"from": "Otto Reutter", "title": 1, "to": "Orchestra", "value": 1}, {"from": "Orchestre Piero Coppola", "title": 2, "to": "Emile Rousseau", "value": 2}, {"from": "Carl Loewe", "title": 1, "to": "Rudolf Watzke", "value": 1}, {"from": "Orchestre Piero Coppola", "title": 1, "to": "Paul Payen", "value": 1}, {"from": "Ludwig van Beethoven", "title": 76, "to": "Berliner Philharmoniker", "value": 76}, {"from": "Harry James", "title": 6, "to": "Helen Forrest", "value": 6}, {"from": "Young Lil Sunscreen", "title": 1, "to": "Tinboat", "value": 1}, {"from": "Francisco Canaro", "title": 1, "to": "Jazz Band", "value": 1}, {"from": "Orchestre Piero Coppola", "title": 1, "to": "Henriette Lebard", "value": 1}, {"from": "Richard Wagner", "title": 1, "to": "Francesco Bartolomeo Conti", "value": 1}, {"from": "Edouard Bervily", "title": 1, "to": "Lucy Perelli", "value": 1}, {"from": "Louis Musy", "title": 1, "to": "Georges Lauweryns", "value": 1}, {"from": "Saadettin Kaynak", "title": 2, "to": "Haf\u0131z Fahri", "value": 2}, {"from": "Francisco Canaro", "title": 2, "to": "Roberto Fugazot", "value": 2}, {"from": "Pearl Bailey", "title": 1, "to": "\"Jackie Moms Mabley\"", "value": 1}, {"from": "Benny Goodman", "title": 3, "to": "Peggy Lee", "value": 3}, {"from": "Jimmy McPartland", "title": 1, "to": "Gil Rodin", "value": 1}, {"from": "Fr\u00e9d\u00e9ric Chopin", "title": 339, "to": "Arthur Rubinstein", "value": 339}, {"from": "Fr\u00e9d\u00e9ric Chopin", "title": 194, "to": "Vladimir Horowitz", "value": 194}, {"from": "Benny Goodman Sextet", "title": 1, "to": "Charlie Christian", "value": 1}, {"from": "Benny Goodman Sextet", "title": 11, "to": "Benny Goodman", "value": 11}, {"from": "Benny Goodman", "title": 1, "to": "Helen Ward", "value": 1}, {"from": "John Raitt", "title": 1, "to": "Barbara Cook", "value": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+        network.on("stabilizationProgress", function(params) {
+      		document.getElementById('loadingBar').removeAttribute("style");
+	        var maxWidth = 496;
+	        var minWidth = 20;
+	        var widthFactor = params.iterations/params.total;
+	        var width = Math.max(minWidth,maxWidth * widthFactor);
+
+	        document.getElementById('bar').style.width = width + 'px';
+	        document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+	    });
+	    network.once("stabilizationIterationsDone", function() {
+	        document.getElementById('text').innerHTML = '100%';
+	        document.getElementById('bar').style.width = '496px';
+	        document.getElementById('loadingBar').style.opacity = 0;
+	        // really clean the dom element
+	        setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+	    });
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
